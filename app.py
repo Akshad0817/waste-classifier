@@ -50,7 +50,7 @@ if uploaded_file is not None:
         pred_class = idx_to_class[pred_idx]
         confidence = preds[pred_idx] * 100
 
-    CONFIDENCE_THRESHOLD = 50.0  # below this, treat as uncertain / possibly not a recognized waste item
+    CONFIDENCE_THRESHOLD = 60.0  # below this, treat as uncertain / possibly not a recognized waste item
 
     if confidence < CONFIDENCE_THRESHOLD:
         st.subheader("Prediction: Uncertain")
@@ -69,4 +69,4 @@ if uploaded_file is not None:
         for idx, prob in enumerate(preds):
             st.write(f"{idx_to_class[idx]}: {prob*100:.1f}%")
 
-st.caption("Model: MobileNetV2 fine-tuned on TrashNet · ~77% validation accuracy · See README for known limitations")
+st.caption("Model: MobileNetV2 fine-tuned on TrashNet · See README for known limitations")
