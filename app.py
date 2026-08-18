@@ -50,9 +50,20 @@ if uploaded_file is not None:
         pred_class = idx_to_class[pred_idx]
         confidence = preds[pred_idx] * 100
 
-    st.subheader(f"Prediction: **{pred_class.upper()}**")
-    st.write(f"Confidence: {confidence:.1f}%")
-    st.info(DISPOSAL_GUIDANCE[pred_class])
+    CONFIDENCE_THRESHOLD = 50.0  # below this, treat as uncertain / possibly not a recognized waste item
+
+    if confidence < CONFIDENCE_THRESHOLD:
+        st.subheader("Prediction: Uncertain")
+        st.write(f"Top guess: {pred_class} ({confidence:.1f}% confidence)")
+        st.warning(
+            "This image doesn't clearly match a recognized waste category. "
+            "It may not be a waste item, or it may be a type/condition (e.g. broken glass) "
+            "the model wasn't trained to recognize well. Treat this result with caution."
+        )
+    else:
+        st.subheader(f"Prediction: **{pred_class.upper()}**")
+        st.write(f"Confidence: {confidence:.1f}%")
+        st.info(DISPOSAL_GUIDANCE[pred_class])
 
     with st.expander("See all class probabilities"):
         for idx, prob in enumerate(preds):
